@@ -1,0 +1,1 @@
+require './lib/resque-serial/server'

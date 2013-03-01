@@ -1,0 +1,14 @@
+<h1>Pending jobs on <span class="hl"><%= @serial_name %></span></h1>
+<table class="jobs">
+  <tbody><tr>
+    <th>Class</th>
+    <th>Args</th>
+  </tr>
+  <% @jobs.each do |job| %>
+    <tr>
+      <td class="class"><%= "#{job[:class]}:#{job[:id]}:#{job[:method]}" %></td>
+      <td class="args"><%= job[:args] %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
