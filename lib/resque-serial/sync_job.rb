@@ -9,8 +9,7 @@ module ResqueSerial
         :sync
       end
 
-      def lock_workers(queue)
-        puts "queue: #{queue}"
+      def lock_key(queue)
         queue
       end
 
