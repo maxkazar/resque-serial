@@ -1,4 +1,8 @@
 <h1>Pending jobs on <span class="hl"><%= @serial_name %></span></h1>
+<form method="POST" action="/serials/<%= @serial_name %>/remove" class="remove-queue">
+  <input type="submit" name="" value="Remove Serial" onclick="return confirm('Are you absolutely sure? This cannot be undone');">
+</form>
+<p class="sub">Showing <b><%= @count %></b> jobs</p>
 <table class="jobs">
   <tbody><tr>
     <th>Class</th>

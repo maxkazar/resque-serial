@@ -23,13 +23,18 @@ module ResqueSerial
         get '/serials/:id' do
           @serial_name = params[:id]
           serial = "resque:syncjobs:#{@serial_name}"
-          count = Redis.current.llen serial
-          @jobs = Redis.current.lrange serial, 0, count
+          @count = Redis.current.llen serial
+          @jobs = Redis.current.lrange serial, 0, @count
 
           @jobs.map! { |job| YAML.load job }
           render_view :serial
         end
 
+        post '/serials/:id/remove' do
+          serial = "resque:syncjobs:#{params[:id]}"
+          Redis.current.del serial
+          redirect u(:serials)
+        end
       end
     end
 
