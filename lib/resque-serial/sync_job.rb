@@ -14,10 +14,10 @@ module ResqueSerial
       end
 
       # Add a job to queue. Queue name is a class module name
-      def create(target, *args)
-        enqueue_payload target, *args
+      def create(target, queue, *args)
+        enqueue_payload target, queue, *args
 
-        Resque.enqueue(self, target.queue)
+        Resque.enqueue(self, queue)
       end
 
       def enqueue_payload(target, method, *args)
@@ -27,7 +27,7 @@ module ResqueSerial
           method: method,
           args: args
         }
-        Resque.redis.rpush "syncjobs:#{target.queue}", options.to_yaml
+        Resque.redis.rpush "syncjobs:#{queue}", options.to_yaml
       end
 
       def dequeue_payload(queue)
@@ -38,6 +38,10 @@ module ResqueSerial
         options = dequeue_payload queue
         model = options[:class].constantize.unscoped.find(options[:id])
         model.send options[:method], *options[:args]
+      end
+
+      def size_of(queue)
+        Resque.redis.llen("resque:syncjobs:#{queue}")
       end
     end
   end

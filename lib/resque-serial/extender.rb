@@ -1,7 +1,8 @@
 module ResqueSerial
   module Extender
     class SyncProxy
-      def initialize(target)
+      def initialize(target, queue)
+        @queue = queue
         @target = target
       end
 
@@ -10,8 +11,12 @@ module ResqueSerial
       end
     end
 
-    def delay
-      SyncProxy.new self
+    def delay(queue = nil)
+      SyncProxy.new self, queue || self.queue
+    end
+
+    def delay_size(queue = nil)
+      SyncJob.size_of(queue || self.queue)
     end
 
     module ClassMethods
