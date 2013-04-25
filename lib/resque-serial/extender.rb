@@ -7,7 +7,7 @@ module ResqueSerial
       end
 
       def method_missing(*args)
-        SyncJob.create @target, *args
+        SyncJob.create @target, @queue, *args
       end
     end
 

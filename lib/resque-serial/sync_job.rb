@@ -20,12 +20,13 @@ module ResqueSerial
         Resque.enqueue(self, queue)
       end
 
-      def enqueue_payload(target, method, *args)
+      def enqueue_payload(target, queue, *args)
+        method = args.shift()
         options = {
-          class: target.class.to_s,
-          id: target.id.to_s,
-          method: method,
-          args: args
+            class: target.class.to_s,
+            id: target.id.to_s,
+            method: method,
+            args: args
         }
         Resque.redis.rpush "syncjobs:#{queue}", options.to_yaml
       end
@@ -41,7 +42,7 @@ module ResqueSerial
       end
 
       def size_of(queue)
-        Resque.redis.llen("resque:syncjobs:#{queue}")
+        Resque.redis.llen("syncjobs:#{queue}")
       end
     end
   end
