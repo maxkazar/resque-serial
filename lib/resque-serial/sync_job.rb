@@ -27,9 +27,8 @@ module ResqueSerial
             id: target.id.to_s,
             method: method,
             args: args,
-            scope: target.scope.id
         }
-        options[:scope] = target.scope.id if target.scope
+        options[:scope] = target.scope.id.to_s if target.scope
 
         Resque.redis.rpush "syncjobs:#{queue}", options.to_yaml
       end
