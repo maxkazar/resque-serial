@@ -26,8 +26,11 @@ module ResqueSerial
             class: target.class.to_s,
             id: target.id.to_s,
             method: method,
-            args: args
+            args: args,
+            scope: target.scope.id
         }
+        options[:scope] = target.scope.id if target.scope
+
         Resque.redis.rpush "syncjobs:#{queue}", options.to_yaml
       end
 
@@ -38,6 +41,7 @@ module ResqueSerial
       def perform(queue)
         options = dequeue_payload queue
         model = options[:class].constantize.unscoped.find(options[:id])
+        model.scope = options.delete(:scope)
         model.send options[:method], *options[:args]
       end
 
