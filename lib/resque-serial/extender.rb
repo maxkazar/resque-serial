@@ -1,18 +1,23 @@
 module ResqueSerial
   module Extender
     class SyncProxy
-      def initialize(target, queue)
+      def initialize(target, queue, async)
         @queue = queue
         @target = target
+        @async = async
       end
 
       def method_missing(*args)
-        SyncJob.create @target, @queue, *args
+        if @async
+          AsyncJob.create @target, @queue, *args
+        else
+          SyncJob.create @target, @queue, *args
+        end
       end
     end
 
-    def delay(queue = nil)
-      SyncProxy.new self, queue || self.queue
+    def delay(options = {})
+      SyncProxy.new self, options[:queue] || self.queue, options[:async]
     end
 
     def delay_size(queue = nil)
