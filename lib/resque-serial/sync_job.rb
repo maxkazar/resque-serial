@@ -39,7 +39,10 @@ module ResqueSerial
 
       def perform(queue)
         options = dequeue_payload queue
-        model = options[:class].constantize.unscoped.find(options[:id])
+
+        model = options[:class].constantize.unscoped.where(id: options[:id]).first
+        return unless model
+
         model.scope = options.delete(:scope)
         model.send options[:method], *options[:args]
       end
