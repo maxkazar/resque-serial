@@ -29,6 +29,7 @@ module ResqueSerial
             args: args,
         }
         options[:scope] = target.scope.id.to_s if target.scope
+        options[:timestamp] = target.timestamp if target.timestamp
 
         Resque.redis.rpush "syncjobs:#{queue}", options.to_yaml
       end

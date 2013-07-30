@@ -19,6 +19,7 @@ module ResqueSerial
             args: args,
         }
         options[:scope] = target.scope.id.to_s if target.scope
+        options[:timestamp] = target.timestamp if target.timestamp
 
         options
       end
@@ -27,6 +28,7 @@ module ResqueSerial
         options.symbolize_keys!
         model = options[:class].constantize.unscoped.find(options[:id])
         model.scope = options.delete(:scope)
+        model.timestamp = options.delete(:timestamp)
         model.send options[:method], *options[:args]
       end
     end
