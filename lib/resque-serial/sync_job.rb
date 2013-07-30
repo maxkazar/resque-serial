@@ -44,6 +44,7 @@ module ResqueSerial
         return unless model
 
         model.scope = options.delete(:scope)
+        model.timestamp = options.delete(:timestamp)
         model.send options[:method], *options[:args]
       end
 
