@@ -18,8 +18,7 @@ module ResqueSerial
             method: method,
             args: args,
         }
-        options[:scope] = target.scope
-        options[:scope] = target.scope.id.to_s unless target.scope.is_a?(String)
+        options[:scope] = target.scope && !target.scope.is_a?(String) ? target.scope.id.to_s : target.scope
         options[:timestamp] = target.timestamp if target.timestamp
 
         options
