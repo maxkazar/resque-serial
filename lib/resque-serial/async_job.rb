@@ -2,7 +2,7 @@ module ResqueSerial
   class AsyncJob
     class << self
       def queue
-        :async
+        :sync
       end
 
       # Add a job to queue. Queue name is a class module name
