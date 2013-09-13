@@ -7,7 +7,11 @@ module ResqueSerial
 
       # Add a job to queue. Queue name is a class module name
       def create(target, queue, *args)
-        Resque.enqueue self, enqueue_payload(target, queue, *args)
+        if queue
+          Resque.enqueue_to queue, self, enqueue_payload(target, queue, *args)
+        else
+          Resque.enqueue self, enqueue_payload(target, queue, *args)
+        end
       end
 
       def enqueue_payload(target, queue, *args)
